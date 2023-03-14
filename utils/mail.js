@@ -1,15 +1,16 @@
 const transporter = require("../transporter/index");
-const page = require("./emailPageHtml");
+const notificationPageHtml = require("./notificationPageHtml");
+const customerPageHtml = require("./customerPageHtml");
 
-const sendEmail = (firstName, lastName, subject, email, phone, content) => {
+const sendCustomerEmail = (to, firstName, lastName) => {
   const sendEmailPromise = new Promise((resolve, reject) => {
     transporter
       .sendMail({
-        from: `${firstName} ${lastName} <danieliosifportofolio@gmail.com>`,
-        to: "morohoschidanieliosif@gmail.com",
-        subject: subject,
-        text: subject,
-        html: page.emailPageHtml(subject, email, phone, content),
+        from: `Daniel-Iosif Morohoschi <danieliosifportofolio@gmail.com>`,
+        to: to,
+        subject: "Thank you for getting in touch!",
+        text: "Thank you for getting in touch!",
+        html: customerPageHtml(firstName, lastName),
         attachments: [
           {
             filename: "image-1.png",
@@ -46,6 +47,81 @@ const sendEmail = (firstName, lastName, subject, email, phone, content) => {
               "/assets/image-5.png",
             cid: "image-5",
           },
+          {
+            filename: "logo.svg",
+            path:
+              __dirname.split("/").slice(0, -1).join("/") + "/assets/logo.svg",
+            cid: "logo",
+          },
+        ],
+      })
+      .then((resp) => resolve(resp))
+      .catch((err) => reject(err));
+  });
+  return sendEmailPromise;
+};
+const sendNotificationEmail = (
+  firstName,
+  lastName,
+  subject,
+  email,
+  phone,
+  content,
+  type
+) => {
+  const sendEmailPromise = new Promise((resolve, reject) => {
+    transporter
+      .sendMail({
+        from: `${firstName} ${lastName} <danieliosifportofolio@gmail.com>`,
+        to: "morohoschidanieliosif@gmail.com",
+        subject: subject,
+        text: subject,
+        html:
+          type === "customer"
+            ? customerPageHtml()
+            : notificationPageHtml(subject, email, phone, content),
+        attachments: [
+          {
+            filename: "image-1.png",
+            path:
+              __dirname.split("/").slice(0, -1).join("/") +
+              "/assets/image-1.png",
+            cid: "image-1",
+          },
+          {
+            filename: "image-2.png",
+            path:
+              __dirname.split("/").slice(0, -1).join("/") +
+              "/assets/image-2.png",
+            cid: "image-2",
+          },
+          {
+            filename: "image-3.png",
+            path:
+              __dirname.split("/").slice(0, -1).join("/") +
+              "/assets/image-3.png",
+            cid: "image-3",
+          },
+          {
+            filename: "image-4.png",
+            path:
+              __dirname.split("/").slice(0, -1).join("/") +
+              "/assets/image-4.png",
+            cid: "image-4",
+          },
+          {
+            filename: "image-5.png",
+            path:
+              __dirname.split("/").slice(0, -1).join("/") +
+              "/assets/image-5.png",
+            cid: "image-5",
+          },
+          {
+            filename: "logo.svg",
+            path:
+              __dirname.split("/").slice(0, -1).join("/") + "/assets/logo.svg",
+            cid: "logo",
+          },
         ],
       })
       .then((resp) => resolve(resp))
@@ -54,4 +130,4 @@ const sendEmail = (firstName, lastName, subject, email, phone, content) => {
   return sendEmailPromise;
 };
 
-module.exports = { sendEmail };
+module.exports = { sendNotificationEmail, sendCustomerEmail };
