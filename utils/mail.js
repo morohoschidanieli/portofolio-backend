@@ -2,7 +2,7 @@ const transporter = require("../transporter/index");
 const notificationPageHtml = require("./notificationPageHtml");
 const customerPageHtml = require("./customerPageHtml");
 
-const sendCustomerEmail = (to, firstName, lastName) => {
+const sendCustomerEmail = (to, name) => {
   const sendEmailPromise = new Promise((resolve, reject) => {
     transporter
       .sendMail({
@@ -10,7 +10,7 @@ const sendCustomerEmail = (to, firstName, lastName) => {
         to: to,
         subject: "Thank you for getting in touch!",
         text: "Thank you for getting in touch!",
-        html: customerPageHtml(firstName, lastName),
+        html: customerPageHtml(name),
         attachments: [
           {
             filename: "image-1.png",
@@ -34,20 +34,6 @@ const sendCustomerEmail = (to, firstName, lastName) => {
             cid: "image-3",
           },
           {
-            filename: "image-4.png",
-            path:
-              __dirname.split("/").slice(0, -1).join("/") +
-              "/assets/image-4.png",
-            cid: "image-4",
-          },
-          {
-            filename: "image-5.png",
-            path:
-              __dirname.split("/").slice(0, -1).join("/") +
-              "/assets/image-5.png",
-            cid: "image-5",
-          },
-          {
             filename: "logo.svg",
             path:
               __dirname.split("/").slice(0, -1).join("/") + "/assets/logo.svg",
@@ -60,19 +46,11 @@ const sendCustomerEmail = (to, firstName, lastName) => {
   });
   return sendEmailPromise;
 };
-const sendNotificationEmail = (
-  firstName,
-  lastName,
-  subject,
-  email,
-  phone,
-  content,
-  type
-) => {
+const sendNotificationEmail = (name, subject, email, phone, content, type) => {
   const sendEmailPromise = new Promise((resolve, reject) => {
     transporter
       .sendMail({
-        from: `${firstName} ${lastName} <danieliosifportofolio@gmail.com>`,
+        from: `${name} <danieliosifportofolio@gmail.com>`,
         to: "morohoschidanieliosif@gmail.com",
         subject: subject,
         text: subject,
@@ -101,20 +79,6 @@ const sendNotificationEmail = (
               __dirname.split("/").slice(0, -1).join("/") +
               "/assets/image-3.png",
             cid: "image-3",
-          },
-          {
-            filename: "image-4.png",
-            path:
-              __dirname.split("/").slice(0, -1).join("/") +
-              "/assets/image-4.png",
-            cid: "image-4",
-          },
-          {
-            filename: "image-5.png",
-            path:
-              __dirname.split("/").slice(0, -1).join("/") +
-              "/assets/image-5.png",
-            cid: "image-5",
           },
           {
             filename: "logo.svg",
